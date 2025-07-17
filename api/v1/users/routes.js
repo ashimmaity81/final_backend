@@ -1,8 +1,20 @@
 const express = require("express");
-const { sendUserBasicInfoController } = require("./controllers");
+const { userAuthenticationMiddleware } = require("../../v1/middleware");
+
+const {
+  sendUserBasicInfoController,
+  sendUserDetailsController,
+  updateUserDetails,
+} = require("./controllers");
 
 const usersRouter = express.Router();
 
-usersRouter.get("/", sendUserBasicInfoController);
+usersRouter.get("/", userAuthenticationMiddleware, sendUserBasicInfoController);
+usersRouter.get(
+  "/details",
+  userAuthenticationMiddleware,
+  sendUserDetailsController
+);
+usersRouter.put("/update", userAuthenticationMiddleware, updateUserDetails);
 
 module.exports = { usersRouter };
