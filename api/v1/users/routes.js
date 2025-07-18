@@ -1,11 +1,10 @@
 const express = require("express");
-const { userAuthenticationMiddleware } = require("../../v1/middleware");
-
 const {
   sendUserBasicInfoController,
   sendUserDetailsController,
   updateUserDetails,
 } = require("./controllers");
+const { userAuthenticationMiddleware } = require("../../v1/middleware");
 
 const usersRouter = express.Router();
 

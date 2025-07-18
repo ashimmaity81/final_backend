@@ -17,35 +17,51 @@ const sendUserDetailsController = async (req, res) => {
   try {
     const { _id } = req.user;
     const user = await UserModel.findById(_id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        isSuccess: false,
+        message: "User not found",
+        data: null,
+      });
+    }
+
     res.status(200).json({
       isSuccess: true,
       message: "User details found!",
-      data: {
-        user: user,
-      },
+      data: { user },
     });
   } catch (err) {
     handleGenericAPIError("sendUserDetailsController", req, res, err);
   }
 };
+
 const updateUserDetails = async (req, res) => {
   try {
     const { _id } = req.user;
     const { name, gender } = req.body;
+
     const updateUser = await UserModel.findByIdAndUpdate(
       _id,
       { name, gender },
       { new: true }
     ).select("-password");
+
+    if (!updateUser) {
+      return res.status(404).json({
+        isSuccess: false,
+        message: "User not found",
+        data: null,
+      });
+    }
+
     res.status(200).json({
       isSuccess: true,
       message: "Profile Updated",
-      data: {
-        user: updateUser,
-      },
+      data: { user: updateUser },
     });
   } catch (err) {
-    handleGenericAPIError("sendUserDetailsController", req, res, err);
+    handleGenericAPIError("updateUserDetails", req, res, err);
   }
 };
 

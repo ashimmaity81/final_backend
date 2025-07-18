@@ -8,10 +8,7 @@ const apiRouter = express.Router();
 
 apiRouter.use("/auth", authRouter);
 
-apiRouter.use(userAuthenticationMiddleware); // authentication
-
-// all the routes below this middleware are now (protected APIs)
-
+apiRouter.use(userAuthenticationMiddleware);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/feedback", feedbackRouter);
 
