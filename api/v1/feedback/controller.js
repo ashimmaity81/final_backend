@@ -21,5 +21,26 @@ const submitFeedback = async (req, res) => {
     handleGenericAPIError("submitFeedback", req, res, err);
   }
 };
+const getAllFeedbacks = async (req, res) => {
+  try {
+    const userRole = req.user?.role;
 
-module.exports = { submitFeedback };
+    if (userRole !== "admin") {
+      return res.status(403).json({
+        isSuccess: false,
+        message: "Access denied. Only admins can view feedbacks.",
+      });
+    }
+
+    const feedbacks = await FeedbackModel.find({}).sort({ createdAt: -1 }); // newest first
+
+    res.status(200).json({
+      isSuccess: true,
+      message: "All feedbacks fetched successfully.",
+      data: feedbacks,
+    });
+  } catch (err) {
+    handleGenericAPIError("getAllFeedbacks", req, res, err);
+  }
+};
+module.exports = { submitFeedback, getAllFeedbacks };
